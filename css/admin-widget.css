@@ -1,0 +1,48 @@
+/* Sortable Table */
+table.view_settings {
+	border: 1px solid #e5e5e5;
+	background-color: #fdfdfd;
+}
+
+	table.view_settings tr {
+		border-bottom: 1px solid #e5e5e5;
+		width: 100%;
+	}
+
+	table.view_settings tr.ui-sortable-helper {
+		border: 1px solid #e5e5e5;
+		background-color: #fff;
+		display: table;
+	}
+
+		table.view_settings tr td {
+			display: table-cell; /* Override wordpress small-screen settings */
+		}
+
+		table.view_settings .ejo-move {
+			
+		}
+
+		table.view_settings .ejo-move:before {
+			cursor: move;
+		}
+
+/* Table size */
+table.view_settings {
+	width: 100%;
+}
+
+	table.view_settings tr td:nth-child(1) {
+		width: 40px;
+		padding-left: 16px;
+	}
+
+	table.view_settings tr td:nth-child(2) {
+		
+	}
+
+	table.view_settings tr td:nth-child(3) {
+		width: 70px;
+		text-align: right;
+		padding-right: 16px;
+	}

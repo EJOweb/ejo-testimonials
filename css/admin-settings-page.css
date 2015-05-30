@@ -1,0 +1,70 @@
+#ejo-tabs a.nav-tab {
+
+}
+
+#ejo-tabs-wrapper div.tab-content {
+	display: none;	
+}
+
+#ejo-tabs-wrapper div.tab-content.active {
+	display: block;
+}
+
+/* Sortable Table */
+#single table,
+#archive table {
+	border: 1px solid #e5e5e5;
+	background-color: #fdfdfd;
+}
+
+	#single table tr,
+	#archive table tr {
+		border-bottom: 1px solid #e5e5e5;
+		width: 100%;
+	}
+
+	#single table tr.ui-sortable-helper,
+	#archive table tr.ui-sortable-helper {
+		border: 1px solid #e5e5e5;
+		background-color: #fff;
+		display: table;
+	}
+
+		#single table tr td,
+		#archive table tr td {
+			display: table-cell; /* Override wordpress small-screen settings */
+		}
+
+		#single table .ejo-move,
+		#archive table .ejo-move {
+			
+		}
+
+		#single table .ejo-move:before,
+		#archive table .ejo-move:before {
+			cursor: move;
+		}
+
+/* Table size */
+#single table,
+#archive table {
+	max-width: 400px;
+}
+
+	#single table tr td:nth-child(1),
+	#archive table tr td:nth-child(1) {
+		width: 40px;
+		padding-left: 16px;
+	}
+
+	#single table tr td:nth-child(2),
+	#archive table tr td:nth-child(2) {
+		width: 200px;
+	}
+
+	#single table tr td:nth-child(3),
+	#archive table tr td:nth-child(3) {
+		width: 160px;
+		text-align: right;
+		padding-right: 16px;
+	}
