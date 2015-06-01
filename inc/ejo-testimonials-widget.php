@@ -111,120 +111,37 @@ class EJO_Testimonials_Widget extends WP_Widget {
 			<input type="text" class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $title; ?>" />
 		</p>
 
-		<?php
-		$view_settings_default = array(
-			'title' => array(
-				'name' => 'Titel',
-				'show' => true,
-			),
-			'image' => array(
-				'name' => 'Afbeelding',
-				'show' => true,
-			),
-			'content' => array(
-				'name' => 'Referentie',
-				'show' => true,
-			),
-			'company' => array(
-				'name' => 'Bedrijf',
-				'show' => true,
-			),
-			'author' => array(
-				'name' => 'Auteur',
-				'show' => true,
-			),
-			'info' => array(
-				'name' => 'Extra Info',
-				'show' => true,
-			),
-			'date' => array(
-				'name' => 'Datum',
-				'show' => true,
-			),
-			'link' => array(
-				'name' => 'Link',
-				'show' => true,
-			),
-		);
-
-		//* Load view_settings for single testimonial or archive
-		$view_settings = (isset($instance['view_settings'])) ? $instance['view_settings'] : array();
-
-		//* Special merge (+) with default to ensure all default testimonial-parts are shown
-		$view_settings = $view_settings + $view_settings_default;
-
-		?>
-			<table class="form-table view_settings">
-			<tbody>
-		<?php
-			foreach ($view_settings as $id => $field) {
-		?>
-				<tr>
-					<td>
-						<div class="ejo-move dashicons-before dashicons-sort"><br/></div>
-					</td>
-					<td>
-						<?php 
-							echo $field['name'];
-							echo 
-								"<input".
-								" type='hidden'".
-								" name='{$this->get_field_name('view_settings')}[{$id}][name]'".
-								" value='$field[name]'".
-								">";
-						?>
-					</td>
-					<td>
-						<?php
-							$checked = (isset($field['show'])) ? checked($field['show'], true, false): '';
-							echo 
-								"<input".
-								" type='checkbox'".
-								" name='{$this->get_field_name('view_settings')}[{$id}][show]'".
-								" id='view-settings-{$id}-show'".
-								  $checked .
-								">";
-							echo "<label for='view-settings-{$id}-show'>Tonen</label>";
-						?>
-					</td>
-				</tr>
-		<?php
-			}
-		?>						
-			</tbody>
-			</table>
-
-			<ul>
-				<li>
-					<label for="testimonials-number">Aantal referenties: </label>
-					<select id="testimonials-number" name="<?php echo $this->get_field_name('count'); ?>">
-						<?php 
-							for ( $i=1; $i<=10; $i++ ){
-								$selected = ( isset($instance['count']) && $i == $instance['count'] ) ? 'selected="selected"': '';
-								echo "<option value='{$i}' {$selected}>{$i}</option>";
-							}
-						?>
-					</select>
-				</li>
-				<li>
-					<?php
-
+		<ul>
+			<li>
+				<label for="testimonials-number">Aantal referenties: </label>
+				<select id="testimonials-number" name="<?php echo $this->get_field_name('count'); ?>">
+					<?php 
+						for ( $i=1; $i<=10; $i++ ){
+							$selected = ( isset($instance['count']) && $i == $instance['count'] ) ? 'selected="selected"': '';
+							echo "<option value='{$i}' {$selected}>{$i}</option>";
+						}
 					?>
-					<label for="testimonials-sort">Sortering: </label>
-					<select id="testimonials-sort" name="<?php echo $this->get_field_name('sort'); ?>">
-						<?php 
-							$sort_options = array(
-								'rand' => 'Random',
-								'date' => 'Nieuw - Oud',
-							);
-							foreach ( $sort_options as $key => $label ){
-								$selected = ( isset($instance['sort']) && $key == $instance['sort'] ) ? 'selected="selected"': '';
-								echo "<option value='{$key}' {$selected}>{$label}</option>";
-							}
-						?>
-					</select>
-				</li>
-			</ul>
+				</select>
+			</li>
+			<li>
+				<?php
+
+				?>
+				<label for="testimonials-sort">Sortering: </label>
+				<select id="testimonials-sort" name="<?php echo $this->get_field_name('sort'); ?>">
+					<?php 
+						$sort_options = array(
+							'rand' => 'Random',
+							'date' => 'Nieuw - Oud',
+						);
+						foreach ( $sort_options as $key => $label ){
+							$selected = ( isset($instance['sort']) && $key == $instance['sort'] ) ? 'selected="selected"': '';
+							echo "<option value='{$key}' {$selected}>{$label}</option>";
+						}
+					?>
+				</select>
+			</li>
+		</ul>
 		<?php
 		
 	}

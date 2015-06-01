@@ -1,13 +1,18 @@
-# Features to include #
+> ## Decisions, not Options
 
-### Settings ###
-- excerpt length
-- excerpt more (tag)
-- give option to link externel hyperlink to info or author
+# Filters
 
-### Other ###
-- image-size
-- loop-function
+- **ejo_testimonials_**
+- ejo_testimonials_single_
+- ejo_testimonials_archive_
+- ejo_testimonials_widget_
 
-# Filters toevoegen #
-Zodat je op basis van filter ($image, $title, $content, $author, $info, $date) volgorde kunt aanpassen.
+## Specifics
+- image_size
+- title
+- author
+- testimonial
+- info
+- date
+- read_more
+- ...
