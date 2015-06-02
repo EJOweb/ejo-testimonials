@@ -43,44 +43,38 @@ class EJO_Testimonials_Widget extends WP_Widget {
 		$testimonials = new WP_Query($query_args);
 
 		//* Add filters for widgets
-		add_filter( 'ejo_testimonials_title_tag', function() { return apply_filters( 'ejo_testimonials_widget_title_tag', 'h3' ); } );
-		add_filter( 'ejo_testimonials_image_size', function() { return apply_filters( 'ejo_testimonials_widget_image_size', 'medium' ); } );
-		add_filter( 'ejo_testimonials_author_tag', function() { return apply_filters( 'ejo_testimonials_widget_author_tag', 'span' ); } );
-		add_filter( 'ejo_testimonials_info_tag', function() { return apply_filters( 'ejo_testimonials_widget_info_tag', 'span' ); } );
-		add_filter( 'ejo_testimonials_date_tag', function() { return apply_filters( 'ejo_testimonials_widget_date_tag', 'span' ); } );
-		add_filter( 'ejo_testimonials_company_tag', function() { return apply_filters( 'ejo_testimonials_widget_company_tag', 'span' ); } );
+		// add_filter( 'ejo_testimonials_title_tag', function() { return apply_filters( 'ejo_testimonials_widget_title_tag', 'h3' ); } );
+		// add_filter( 'ejo_testimonials_image_size', function() { return apply_filters( 'ejo_testimonials_widget_image_size', 'medium' ); } );
+		// add_filter( 'ejo_testimonials_author_tag', function() { return apply_filters( 'ejo_testimonials_widget_author_tag', 'span' ); } );
+		// add_filter( 'ejo_testimonials_info_tag', function() { return apply_filters( 'ejo_testimonials_widget_info_tag', 'span' ); } );
+		// add_filter( 'ejo_testimonials_date_tag', function() { return apply_filters( 'ejo_testimonials_widget_date_tag', 'span' ); } );
+		// add_filter( 'ejo_testimonials_company_tag', function() { return apply_filters( 'ejo_testimonials_widget_company_tag', 'span' ); } );
 
-		//* Check if testimonials available
-		if ( $testimonials->have_posts() ) :	
+		if ( $testimonials->have_posts() ) : // Check if testimonials available ?>
 
-			echo '<div class="testimonials-container">';
+			<div class="testimonials-container">
 
-			//* Loop through testimonials
-			while ( $testimonials->have_posts() ) : $testimonials->the_post();
+			<?php while ( $testimonials->have_posts() ) : // Loop through testimonials ?>
 
-				//* Get testimonials
-				$testimonial = EJO_Testimonials::get_testimonial( get_the_ID(), $instance['view_settings'] );
+				<?php $testimonials->the_post(); // Loads the post data ?>
 
-				echo '<div class="testimonial">';
+				<div class="testimonial">
 
-				//* Loop through testimonial-parts
-				foreach ($testimonial as $testimonial_part) {
-					echo $testimonial_part;
-				}
+					<?php echo EJO_Testimonials::the_testimonial( get_the_ID() ); // print testimonial ?>
 
-				echo '</div>';
-				
-			endwhile;
+				</div>
+			
+			<?php endwhile; ?>
 
-			echo '</div>';
+			</div>
 
-		else :
+		<?php else : ?>
 
-			/* No testimonials */
+			<?php /* No testimonials */ ?>
 
-		endif;
+		<?php endif; 
 
-		/* Restore original Post Data */
+		//* Restore original Post Data 
 		wp_reset_postdata();
 
 		//* Close widget
