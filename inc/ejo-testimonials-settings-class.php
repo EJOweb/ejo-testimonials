@@ -107,6 +107,9 @@ class EJO_Testimonials_Settings
     	//* Linktext
 		$linktext = (isset($ejo_testimonials_settings['linktext'])) ? $ejo_testimonials_settings['linktext'] : 'Lees Meer';
 
+		//* Archive
+		$archive = (isset($ejo_testimonials_settings['archive'])) ? $ejo_testimonials_settings['archive'] : 'testimonials';
+
     	?>
     	<table class="form-table">
 			<tbody>
@@ -124,6 +127,22 @@ class EJO_Testimonials_Settings
 							class="text"
 						>
 						<span class="description">Tekst op de button wanneer er gelinkt wordt naar een referentie.</span>
+					</td>
+				</tr>
+
+				<tr>					
+					<th scope="row" style="width: 140px">
+						<label for="ejo-testimonials-settings-archive">Archief url</label>
+					</th>
+					<td>
+						<input
+							id="ejo-testimonials-settings-archive"
+							value="<?php echo $archive; ?>"
+							type="text"
+							name="ejo-testimonials-settings[archive]"
+							class="text"
+						>
+						<span class="description">slug voor archief</span>
 					</td>
 				</tr>
 				

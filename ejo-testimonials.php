@@ -3,7 +3,7 @@
  * Plugin Name: EJO Testimonials
  * Plugin URI: http://github.com/ejoweb/ejo-testimonials
  * Description: Testimonials, the EJOweb way. 
- * Version: 0.9.1
+ * Version: 0.9.2
  * Author: Erik Joling
  * Author URI: http://www.ejoweb.nl/
  */
@@ -22,7 +22,7 @@ include_once( $plugin_dir . 'inc/ejo-testimonials-widget.php' );
 final class EJO_Testimonials
 {
 	 //* Version number of this plugin
-	public static $version = '0.9.1';
+	public static $version = '0.9.2';
 
 	//* Holds the instance of this class.
 	private static $_instance = null;
@@ -114,7 +114,7 @@ final class EJO_Testimonials
 		$link 	 = self::get_testimonial_link_wrapped($post_id);
 
 		//* Output
-		$output = $title . $image . $content . $author . $info . $date . $company . $link . "\n\n";
+		$output  = $title . $image . $content . $author . $info . $date . $company . $link . "\n\n";
 
 		return apply_filters( 'ejo_testimonials', $output, $title, $image, $content, $author, $info, $date, $company, $link);
 	}
@@ -276,10 +276,10 @@ final class EJO_Testimonials
 	public static function get_testimonial_link( $post_id = null, $class = 'button' )
 	{	
 		//* Get linktext
-		get_option( 'ejo_testimonials_other_settings', array() );
+		$ejo_testimonials_settings = get_option( 'ejo_testimonials_settings', array() );
 
 		//* Linktext. Default = Lees Meer
-		$read_more_text = (isset($ejo_testimonials_other_settings['linktext'])) ? $ejo_testimonials_other_settings['linktext'] : 'Lees Meer';
+		$read_more_text = (isset($ejo_testimonials_settings['linktext'])) ? $ejo_testimonials_settings['linktext'] : 'Lees Meer';
 
 		//* Get the permalink to the testimonial
 		$url = self::get_testimonial_permalink($post_id);
@@ -332,7 +332,7 @@ final class EJO_Testimonials
 		//* Wrap content
 		$output = sprintf( '<blockquote>%s</blockquote>', $content );
 
-		return apply_filters( 'ejo_testimonials_title_wrap', $output, $content );
+		return apply_filters( 'ejo_testimonials_quote_wrap', $output, $content );
 	}
 
 

@@ -43,12 +43,23 @@ class EJO_Testimonials_Widget extends WP_Widget {
 		$testimonials = new WP_Query($query_args);
 
 		//* Add filters for widgets
-		// add_filter( 'ejo_testimonials_title_tag', function() { return apply_filters( 'ejo_testimonials_widget_title_tag', 'h3' ); } );
-		// add_filter( 'ejo_testimonials_image_size', function() { return apply_filters( 'ejo_testimonials_widget_image_size', 'medium' ); } );
-		// add_filter( 'ejo_testimonials_author_tag', function() { return apply_filters( 'ejo_testimonials_widget_author_tag', 'span' ); } );
-		// add_filter( 'ejo_testimonials_info_tag', function() { return apply_filters( 'ejo_testimonials_widget_info_tag', 'span' ); } );
-		// add_filter( 'ejo_testimonials_date_tag', function() { return apply_filters( 'ejo_testimonials_widget_date_tag', 'span' ); } );
-		// add_filter( 'ejo_testimonials_company_tag', function() { return apply_filters( 'ejo_testimonials_widget_company_tag', 'span' ); } );
+		add_filter( 'ejo_testimonials_title_wrap', function($output, $title) { 
+
+			//* Wrap title in heading
+			$output = sprintf( "<h4 class='%s' itemprop='%s'>%s</h4>", 'entry-title', 'headline', $title );
+
+			return apply_filters( 'ejo_testimonials_widget_title_wrap', $output, $title ); 
+
+		}, 10, 2);
+
+
+		//* Create new filter option for widget
+		add_filter( 'ejo_testimonials', function($output, $title, $image, $testimonial, $author, $info, $date, $company, $link) {
+
+			//* Create new filter option for widget
+			return apply_filters( 'ejo_testimonials_widget', $output, $title, $image, $testimonial, $author, $info, $date, $company, $link );
+			
+		}, 10, 9);
 
 		if ( $testimonials->have_posts() ) : // Check if testimonials available ?>
 
