@@ -60,15 +60,15 @@ class EJO_Testimonials_Settings
 			<h2>Referentie Instellingen</h2>
 
 			<?php 
-				// Save testimonials data
-				if (isset($_POST['submit']) ) {
+			// Save testimonials data
+			if (isset($_POST['submit']) ) {
 
-					if (!empty($_POST['ejo-testimonials-settings'])) {
-						update_option( "ejo_testimonials_settings", $_POST['ejo-testimonials-settings'] ); 
-					}
-
-					echo "<div class='updated'><p>Testimonial settings updated successfully.</p></div>";
+				if (!empty($_POST['ejo-testimonials-settings'])) {
+					update_option( "ejo_testimonials_settings", $_POST['ejo-testimonials-settings'] ); 
 				}
+
+				echo "<div class='updated'><p>Testimonial settings updated successfully.</p></div>";
+			}
 			?>
 
 			<form action="<?php echo esc_attr( wp_unslash( $_SERVER['REQUEST_URI'] ) ); ?>" method="post">

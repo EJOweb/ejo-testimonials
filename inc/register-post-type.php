@@ -31,7 +31,8 @@
 		'exclude_from_search' => true,
 
 		'rewrite' => array(
-			'slug'		=> $archive,
+			'slug'		 => $archive,
+			'with_front' => false,
 		),
 		'has_archive'	=> $archive,
 		

@@ -11,6 +11,7 @@ class EJO_Testimonials_Widget extends WP_Widget {
 		//* Widget Description
 		$widget_info = array(
 			'description' => 'Show Testimonials',
+			'classname'   => 'ejo-testimonials-widget',
 		);
 
 		//* Setup Widget
@@ -18,6 +19,9 @@ class EJO_Testimonials_Widget extends WP_Widget {
 
 		//* Add scripts to settings page
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_testimonials_widget_scripts_and_styles' ) ); 
+
+		//* Add Testimonial print to custom widget hook
+		add_action( 'ejo_testimonials_widget_loop', array( $this, 'ejo_testimonials_widget_do_testimonial' ) );
 	}
 	
 	//* Echo the widget content.
@@ -42,42 +46,16 @@ class EJO_Testimonials_Widget extends WP_Widget {
 		//* Get testimonial posts
 		$testimonials = new WP_Query($query_args);
 
-		//* Add filters for widgets
-		add_filter( 'ejo_testimonials_title_wrap', function($output, $title) { 
-
-			//* Wrap title in heading
-			$output = sprintf( "<h4 class='%s' itemprop='%s'>%s</h4>", 'entry-title', 'headline', $title );
-
-			return apply_filters( 'ejo_testimonials_widget_title_wrap', $output, $title ); 
-
-		}, 10, 2);
-
-
-		//* Create new filter option for widget
-		add_filter( 'ejo_testimonials', function($output, $title, $image, $testimonial, $author, $info, $date, $company, $link) {
-
-			//* Create new filter option for widget
-			return apply_filters( 'ejo_testimonials_widget', $output, $title, $image, $testimonial, $author, $info, $date, $company, $link );
-			
-		}, 10, 9);
-
+		//* Loop through Testimonials
 		if ( $testimonials->have_posts() ) : // Check if testimonials available ?>
-
-			<div class="testimonials-container">
 
 			<?php while ( $testimonials->have_posts() ) : // Loop through testimonials ?>
 
 				<?php $testimonials->the_post(); // Loads the post data ?>
 
-				<div class="testimonial">
+				<?php do_action( 'ejo_testimonials_widget_loop' ); // Hook for printing testimonial ?>
 
-					<?php echo EJO_Testimonials::the_testimonial( get_the_ID() ); // print testimonial ?>
-
-				</div>
-			
 			<?php endwhile; ?>
-
-			</div>
 
 		<?php else : ?>
 
@@ -161,6 +139,58 @@ class EJO_Testimonials_Widget extends WP_Widget {
 
 		//* Settings page stylesheet
 		wp_enqueue_style( EJO_Testimonials::$slug."-admin-widget-css", EJO_Testimonials::$uri ."css/admin-widget.css" );
+	}
+
+	public function get_testimonial( $post_id )
+	{
+		$title 	 = EJO_Testimonials::get_testimonial_title($post_id); //* Get title of testimonial
+		$image   = EJO_Testimonials::get_testimonial_image($post_id); //* Store image
+		$content = EJO_Testimonials::get_testimonial_content($post_id); //* Store content
+		$author  = EJO_Testimonials::get_testimonial_author($post_id); //* Get testimonial author
+		$info	 = EJO_Testimonials::get_testimonial_info($post_id); //* Get testimonial info
+		$date 	 = EJO_Testimonials::get_testimonial_date($post_id); //* Get testimonial date
+		$company = EJO_Testimonials::get_testimonial_company($post_id); //* Get testimonial company
+		$link 	 = EJO_Testimonials::get_testimonial_link($post_id); //* Store link of testimonial
+
+		$title_output	= '<h4 class="entry-title">' . $title . '</h4>';
+		$image_output	= $image;
+		$content_output	= '<blockquote>' . $content . '</blockquote>';
+		$author_output	= !empty($author) ? '<span class="author">' . $author . '</span>' : '';
+		$info_output	= !empty($info) ? '<span class="info">' . $info . '</span>' : '';
+		$date_output	= !empty($date) ? '<span class="date">' . $date . '</span>' : '';
+		$company_output	= !empty($company) ? '<span class="company">' . $company . '</span>' : '';
+		$link_output	= $link;
+
+		//* Output
+		$output  = $title_output . $image_output . $content_output . $author_output . $info_output . $date_output . $company_output . $link_output . "\n\n";
+
+		return apply_filters( 'ejo_testimonials_widget', $output, $title_output, $image_output, $content_output, $author_output, $info_output, $date_output, $company_output, $link_output);
+	}
+
+	//* Print testimonial inside custom loop
+	public function ejo_testimonials_widget_do_testimonial()
+	{
+		$title 	 = EJO_Testimonials::get_testimonial_title(); //* Get title of testimonial
+		$image   = EJO_Testimonials::get_testimonial_image(); //* Get image
+		$content = EJO_Testimonials::get_testimonial_content(); //* Get content
+		$author  = EJO_Testimonials::get_testimonial_author(); //* Get testimonial author
+		$info	 = EJO_Testimonials::get_testimonial_info(); //* Get testimonial info
+		$date 	 = EJO_Testimonials::get_testimonial_date(); //* Get testimonial date
+		$company = EJO_Testimonials::get_testimonial_company(); //* Get testimonial company
+		$link 	 = EJO_Testimonials::get_testimonial_link(); //* Get link of testimonial
+
+		?>
+
+		<h4 class="entry-title"><?php echo $title; ?></h4>
+		<?php echo $image; ?>
+		<blockquote><?php echo $content; ?></blockquote>
+		<span class="author"><?php echo $author; ?></span>
+		<span class="info"><?php echo $info; ?></span>
+		<span class="date"><?php echo $date; ?></span>
+		<span class="company"><?php echo $company; ?></span>
+		<?php echo $link; ?>
+
+		<?php
 	}
 
 	/**
