@@ -6,6 +6,8 @@
  * Version: 0.8.1
  * Author: Erik Joling
  * Author URI: http://www.ejoweb.nl/
+ *
+ * GitHub Plugin URI: https://github.com/EJOweb/ejo-testimonials
  */
 
 // Store directory path of this plugin
