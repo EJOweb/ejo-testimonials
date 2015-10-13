@@ -1,13 +1,14 @@
 <?php
 /**
- * Plugin Name: EJO Testimonials
- * Plugin URI: http://github.com/ejoweb/ejo-testimonials
- * Description: Testimonials, the EJOweb way. 
- * Version: 0.9.3
- * Author: Erik Joling
- * Author URI: http://www.ejoweb.nl/
+ * Plugin Name:         EJO Testimonials
+ * Plugin URI:          http://github.com/ejoweb/ejo-testimonials
+ * Description:         Testimonials, the EJOweb way. 
+ * Version:             0.9.3
+ * Author:              Erik Joling
+ * Author URI:          http://www.ejoweb.nl/
  *
- * GitHub Plugin URI: https://github.com/EJOweb/ejo-testimonials
+ * GitHub Plugin URI:   https://github.com/EJOweb/ejo-testimonials
+ * GitHub Branch:       master
  */
 
 // Store directory path of this plugin
