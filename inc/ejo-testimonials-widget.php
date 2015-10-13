@@ -11,6 +11,7 @@ class EJO_Testimonials_Widget extends WP_Widget {
 		//* Widget Description
 		$widget_info = array(
 			'description' => 'Show Testimonials',
+			'classname'   => 'ejo-testimonials-widget',
 		);
 
 		//* Setup Widget
@@ -18,6 +19,9 @@ class EJO_Testimonials_Widget extends WP_Widget {
 
 		//* Add scripts to settings page
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_testimonials_widget_scripts_and_styles' ) ); 
+
+		//* Add Testimonial print to custom widget hook
+		add_action( 'ejo_testimonials_widget_loop', array( $this, 'ejo_testimonials_widget_do_testimonial' ) );
 	}
 	
 	//* Echo the widget content.
@@ -42,45 +46,24 @@ class EJO_Testimonials_Widget extends WP_Widget {
 		//* Get testimonial posts
 		$testimonials = new WP_Query($query_args);
 
-		//* Add filters for widgets
-		add_filter( 'ejo_testimonials_title_tag', function() { return apply_filters( 'ejo_testimonials_widget_title_tag', 'h3' ); } );
-		add_filter( 'ejo_testimonials_image_size', function() { return apply_filters( 'ejo_testimonials_widget_image_size', 'medium' ); } );
-		add_filter( 'ejo_testimonials_author_tag', function() { return apply_filters( 'ejo_testimonials_widget_author_tag', 'span' ); } );
-		add_filter( 'ejo_testimonials_info_tag', function() { return apply_filters( 'ejo_testimonials_widget_info_tag', 'span' ); } );
-		add_filter( 'ejo_testimonials_date_tag', function() { return apply_filters( 'ejo_testimonials_widget_date_tag', 'span' ); } );
-		add_filter( 'ejo_testimonials_company_tag', function() { return apply_filters( 'ejo_testimonials_widget_company_tag', 'span' ); } );
+		//* Loop through Testimonials
+		if ( $testimonials->have_posts() ) : // Check if testimonials available ?>
 
-		//* Check if testimonials available
-		if ( $testimonials->have_posts() ) :	
+			<?php while ( $testimonials->have_posts() ) : // Loop through testimonials ?>
 
-			echo '<div class="testimonials-container">';
+				<?php $testimonials->the_post(); // Loads the post data ?>
 
-			//* Loop through testimonials
-			while ( $testimonials->have_posts() ) : $testimonials->the_post();
+				<?php do_action( 'ejo_testimonials_widget_loop' ); // Hook for printing testimonial ?>
 
-				//* Get testimonials
-				$testimonial = EJO_Testimonials::get_testimonial( get_the_ID(), $instance['view_settings'] );
+			<?php endwhile; ?>
 
-				echo '<div class="testimonial">';
+		<?php else : ?>
 
-				//* Loop through testimonial-parts
-				foreach ($testimonial as $testimonial_part) {
-					echo $testimonial_part;
-				}
+			<?php /* No testimonials */ ?>
 
-				echo '</div>';
-				
-			endwhile;
+		<?php endif; 
 
-			echo '</div>';
-
-		else :
-
-			/* No testimonials */
-
-		endif;
-
-		/* Restore original Post Data */
+		//* Restore original Post Data 
 		wp_reset_postdata();
 
 		//* Close widget
@@ -111,120 +94,37 @@ class EJO_Testimonials_Widget extends WP_Widget {
 			<input type="text" class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $title; ?>" />
 		</p>
 
-		<?php
-		$view_settings_default = array(
-			'title' => array(
-				'name' => 'Titel',
-				'show' => true,
-			),
-			'image' => array(
-				'name' => 'Afbeelding',
-				'show' => true,
-			),
-			'content' => array(
-				'name' => 'Referentie',
-				'show' => true,
-			),
-			'company' => array(
-				'name' => 'Bedrijf',
-				'show' => true,
-			),
-			'author' => array(
-				'name' => 'Auteur',
-				'show' => true,
-			),
-			'info' => array(
-				'name' => 'Extra Info',
-				'show' => true,
-			),
-			'date' => array(
-				'name' => 'Datum',
-				'show' => true,
-			),
-			'link' => array(
-				'name' => 'Link',
-				'show' => true,
-			),
-		);
-
-		//* Load view_settings for single testimonial or archive
-		$view_settings = (isset($instance['view_settings'])) ? $instance['view_settings'] : array();
-
-		//* Special merge (+) with default to ensure all default testimonial-parts are shown
-		$view_settings = $view_settings + $view_settings_default;
-
-		?>
-			<table class="form-table view_settings">
-			<tbody>
-		<?php
-			foreach ($view_settings as $id => $field) {
-		?>
-				<tr>
-					<td>
-						<div class="ejo-move dashicons-before dashicons-sort"><br/></div>
-					</td>
-					<td>
-						<?php 
-							echo $field['name'];
-							echo 
-								"<input".
-								" type='hidden'".
-								" name='{$this->get_field_name('view_settings')}[{$id}][name]'".
-								" value='$field[name]'".
-								">";
-						?>
-					</td>
-					<td>
-						<?php
-							$checked = (isset($field['show'])) ? checked($field['show'], true, false): '';
-							echo 
-								"<input".
-								" type='checkbox'".
-								" name='{$this->get_field_name('view_settings')}[{$id}][show]'".
-								" id='view-settings-{$id}-show'".
-								  $checked .
-								">";
-							echo "<label for='view-settings-{$id}-show'>Tonen</label>";
-						?>
-					</td>
-				</tr>
-		<?php
-			}
-		?>						
-			</tbody>
-			</table>
-
-			<ul>
-				<li>
-					<label for="testimonials-number">Aantal referenties: </label>
-					<select id="testimonials-number" name="<?php echo $this->get_field_name('count'); ?>">
-						<?php 
-							for ( $i=1; $i<=10; $i++ ){
-								$selected = ( isset($instance['count']) && $i == $instance['count'] ) ? 'selected="selected"': '';
-								echo "<option value='{$i}' {$selected}>{$i}</option>";
-							}
-						?>
-					</select>
-				</li>
-				<li>
-					<?php
-
+		<ul>
+			<li>
+				<label for="testimonials-number">Aantal referenties: </label>
+				<select id="testimonials-number" name="<?php echo $this->get_field_name('count'); ?>">
+					<?php 
+						for ( $i=1; $i<=10; $i++ ){
+							$selected = ( isset($instance['count']) && $i == $instance['count'] ) ? 'selected="selected"': '';
+							echo "<option value='{$i}' {$selected}>{$i}</option>";
+						}
 					?>
-					<label for="testimonials-sort">Sortering: </label>
-					<select id="testimonials-sort" name="<?php echo $this->get_field_name('sort'); ?>">
-						<?php 
-							$sort_options = array(
-								'rand' => 'Random',
-								'date' => 'Nieuw - Oud',
-							);
-							foreach ( $sort_options as $key => $label ){
-								$selected = ( isset($instance['sort']) && $key == $instance['sort'] ) ? 'selected="selected"': '';
-								echo "<option value='{$key}' {$selected}>{$label}</option>";
-							}
-						?>
-					</select>
-				</li>
-			</ul>
+				</select>
+			</li>
+			<li>
+				<?php
+
+				?>
+				<label for="testimonials-sort">Sortering: </label>
+				<select id="testimonials-sort" name="<?php echo $this->get_field_name('sort'); ?>">
+					<?php 
+						$sort_options = array(
+							'rand' => 'Random',
+							'date' => 'Nieuw - Oud',
+						);
+						foreach ( $sort_options as $key => $label ){
+							$selected = ( isset($instance['sort']) && $key == $instance['sort'] ) ? 'selected="selected"': '';
+							echo "<option value='{$key}' {$selected}>{$label}</option>";
+						}
+					?>
+				</select>
+			</li>
+		</ul>
 		<?php
 		
 	}
@@ -239,6 +139,58 @@ class EJO_Testimonials_Widget extends WP_Widget {
 
 		//* Settings page stylesheet
 		wp_enqueue_style( EJO_Testimonials::$slug."-admin-widget-css", EJO_Testimonials::$uri ."css/admin-widget.css" );
+	}
+
+	public function get_testimonial( $post_id )
+	{
+		$title 	 = EJO_Testimonials::get_testimonial_title($post_id); //* Get title of testimonial
+		$image   = EJO_Testimonials::get_testimonial_image($post_id); //* Store image
+		$content = EJO_Testimonials::get_testimonial_content($post_id); //* Store content
+		$author  = EJO_Testimonials::get_testimonial_author($post_id); //* Get testimonial author
+		$info	 = EJO_Testimonials::get_testimonial_info($post_id); //* Get testimonial info
+		$date 	 = EJO_Testimonials::get_testimonial_date($post_id); //* Get testimonial date
+		$company = EJO_Testimonials::get_testimonial_company($post_id); //* Get testimonial company
+		$link 	 = EJO_Testimonials::get_testimonial_link($post_id); //* Store link of testimonial
+
+		$title_output	= '<h4 class="entry-title">' . $title . '</h4>';
+		$image_output	= $image;
+		$content_output	= '<blockquote>' . $content . '</blockquote>';
+		$author_output	= !empty($author) ? '<span class="author">' . $author . '</span>' : '';
+		$info_output	= !empty($info) ? '<span class="info">' . $info . '</span>' : '';
+		$date_output	= !empty($date) ? '<span class="date">' . $date . '</span>' : '';
+		$company_output	= !empty($company) ? '<span class="company">' . $company . '</span>' : '';
+		$link_output	= $link;
+
+		//* Output
+		$output  = $title_output . $image_output . $content_output . $author_output . $info_output . $date_output . $company_output . $link_output . "\n\n";
+
+		return apply_filters( 'ejo_testimonials_widget', $output, $title_output, $image_output, $content_output, $author_output, $info_output, $date_output, $company_output, $link_output);
+	}
+
+	//* Print testimonial inside custom loop
+	public function ejo_testimonials_widget_do_testimonial()
+	{
+		$title 	 = EJO_Testimonials::get_testimonial_title(); //* Get title of testimonial
+		$image   = EJO_Testimonials::get_testimonial_image(); //* Get image
+		$content = EJO_Testimonials::get_testimonial_content(); //* Get content
+		$author  = EJO_Testimonials::get_testimonial_author(); //* Get testimonial author
+		$info	 = EJO_Testimonials::get_testimonial_info(); //* Get testimonial info
+		$date 	 = EJO_Testimonials::get_testimonial_date(); //* Get testimonial date
+		$company = EJO_Testimonials::get_testimonial_company(); //* Get testimonial company
+		$link 	 = EJO_Testimonials::get_testimonial_link(); //* Get link of testimonial
+
+		?>
+
+		<h4 class="entry-title"><?php echo $title; ?></h4>
+		<?php echo $image; ?>
+		<blockquote><?php echo $content; ?></blockquote>
+		<span class="author"><?php echo $author; ?></span>
+		<span class="info"><?php echo $info; ?></span>
+		<span class="date"><?php echo $date; ?></span>
+		<span class="company"><?php echo $company; ?></span>
+		<?php echo $link; ?>
+
+		<?php
 	}
 
 	/**

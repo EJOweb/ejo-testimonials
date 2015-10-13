@@ -1,5 +1,8 @@
 jQuery(document).ready(function() {
 
+	/*********************************
+     * Tabbed Navigation
+     *********************************/
 	jQuery('#ejo-tabs').find('a').click(function() {
 		jQuery('#ejo-tabs').find('.nav-tab').removeClass('nav-tab-active');
 		jQuery('#ejo-tabs-wrapper').find('.tab-content').removeClass('active');
@@ -15,18 +18,5 @@ jQuery(document).ready(function() {
 	// default active-state to first tab
 	jQuery('#ejo-tabs').find('.nav-tab:first').addClass('nav-tab-active');
 	jQuery('#ejo-tabs-wrapper').find('.tab-content:first').addClass('active');
-
-	/*********************************
-     * Sortable
-     *********************************/
-	jQuery( "#single table tbody" ).sortable({
-		revert: true,
-		handle: ".ejo-move",
-	});
-
-	jQuery( "#archive table tbody" ).sortable({
-		revert: true,
-		handle: ".ejo-move",
-	});
 
 });

@@ -1,4 +1,9 @@
 <?php 
+	//* Get linktext
+	$ejo_testimonials_settings = get_option( 'ejo_testimonials_settings', array() );
+
+	//* Archive slug. Default = testimonials
+	$archive = (isset($ejo_testimonials_settings['archive'])) ? $ejo_testimonials_settings['archive'] : 'testimonials';
 
 	$labels = array(
 		'name'                => 'Referenties',
@@ -26,9 +31,10 @@
 		'exclude_from_search' => true,
 
 		'rewrite' => array(
-			'slug'		=> 'referenties',
+			'slug'		 => $archive,
+			'with_front' => false,
 		),
-		'has_archive'	=> 'referenties',
+		'has_archive'	=> $archive,
 		
 	);
 
