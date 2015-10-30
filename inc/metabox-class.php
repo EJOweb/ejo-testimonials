@@ -37,18 +37,17 @@ class EJO_Testimonials_Metabox
 		// Noncename needed to verify where the data originated
 		wp_nonce_field( EJO_Testimonials::$slug.'-metabox-' . $post->ID, EJO_Testimonials::$slug.'-meta-nonce' );
 
-		//* Meta key
-		$meta_key = 'ejo_testimonials_data';
+		//* Load testimonial data
+		$meta_key = 'ejo_testimonials_info';
+		$testimonial = get_post_meta( $post->ID, $meta_key, true );
 
-		$default_testimonial = array(
+		$testimonial = wp_parse_args( $testimonial, array(
 			'company' => '',
 			'author' => '',
 			'date'   => '',
 			'info' 	 => '',
 			'url'    => '',
-		);
-		$testimonial = get_post_meta( $post->ID, $meta_key, true );
-		$testimonial = wp_parse_args( $testimonial, $default_testimonial );
+		));
 	?>
 		<table class="form-table">
 			<tr>
@@ -152,7 +151,7 @@ class EJO_Testimonials_Metabox
 		if ( !isset($_POST[EJO_Testimonials::$slug."-meta-nonce"]) || !wp_verify_nonce( $_POST[EJO_Testimonials::$slug."-meta-nonce"], EJO_Testimonials::$slug."-metabox-" . $post_id ) )
 			return;
 
-		$meta_key = 'ejo_testimonials_data';
+		$meta_key = 'ejo_testimonials_info';
 
 		if ( isset( $_POST[EJO_Testimonials::$slug] ) )
 			update_post_meta( $post_id, $meta_key, $_POST[EJO_Testimonials::$slug] );
