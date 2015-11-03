@@ -1,14 +1,14 @@
-/*
-Tabbed Navigation 
-*/
-#ejo-tabs a.nav-tab {
-
+.form-table {
+	width: 580px;
 }
 
-#ejo-tabs-wrapper div.tab-content {
-	display: none;	
-}
-
-#ejo-tabs-wrapper div.tab-content.active {
+.form-table th label {
 	display: block;
+	width: 180px;
+}
+
+.form-table td input,
+.form-table td textarea,
+.form-table td select {
+	width: 400px;
 }
