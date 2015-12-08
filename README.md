@@ -1,23 +1,10 @@
-> ## Decisions, not Options
+## Remember: Decisions, not Options
 
-# Filters
+Options:
+- Archive slug
+- Fallback image (To be added)
 
-- **ejo_testimonials**
-- ejo_testimonials_single
-- ejo_testimonials_archive
-- ejo_testimonials_widget
-
-Example: 
-add_filter('ejo_testimonials', 'ejo_testimonials_custom_output', 10, 9);
-function ejo_testimonials_custom_output( $output, $title, $image, $testimonial, $author, $info, $date, $company, $link )
-{ return $output; }
-
-## Specifics
-- image_size
-- title
-- author
-- testimonial
-- info
-- date
-- read_more
-- ...
+## Important changes at version 1.0
+- Removed filters and replaced by actions
+- Renamed meta_key from ejo_testimonials_data to ejo_testimonials_info
+- Save and get author, company, info, date, external url from one post_meta entry
